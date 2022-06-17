@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('sub_posts', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('subpost_body');
+            $table->string('subpost_body')->nullable();
             $table->integer('subpost_type')->default(0);
             $table->integer('subpost_user')->default(1);
             $table->integer('subpost_parent')->default(1);

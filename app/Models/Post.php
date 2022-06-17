@@ -21,13 +21,4 @@ class Post extends Model
         'post_atribute_3',
         
     ];
-
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
-
-    public function subpost() {
-        return $this->hasMany(SubPost::class);
-    } 
-
 }

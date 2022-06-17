@@ -18,7 +18,7 @@ class PostController extends Controller
 
     //response
         return response([
-            'posts'=> Post::orderBy('created_at', 'desc')->with('user:id,name,user_atribute_1')->get(),
+            'posts'=> Post::orderBy('created_at', 'desc')->get(),
         ], 200);
     }
 
@@ -84,7 +84,7 @@ class PostController extends Controller
     //response
         return response([
             'message'=> 'Atributes have been added',
-            'post_body'=> $post,
+            'post'=> $post,
         ], 200);
     }
 
