@@ -21,7 +21,7 @@ class AuthController extends Controller
         
         if($validUser->fails()) {
             return response([
-                'message'=> 'bad request'
+                'message'=> 'bad request',
             ], 400);
         }
 
@@ -57,7 +57,8 @@ class AuthController extends Controller
     //attempt and feedback
         if (!Auth::attempt($credentials)) {
             return response([
-                'message'=> 'invalid credentials'
+                'message'=> 'invalid credentials', 
+                'credentials'=> $credentials['password']
             ], 500);
         } 
 
@@ -99,23 +100,47 @@ class AuthController extends Controller
     public function update(Request $request) {
 
     //user
+        $user= User::find(PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
+
         $validUser=Validator::make($request->all(), [
             'name'=> 'required|string',
-            'email'=> 'required|email',
             'password'=> 'required|string',
+            'user_atribute_1'=> 'nullable|string',
+            'user_atribute_2'=> 'nullable|string',
         ]);
 
+        if($validUser->fails()) {
+            return response([
+                'message'=> 'bad request'
+            ], 400);
+        }
+
     //update
-        auth()->user()->update([
-            'name'=> $validUser->name,
-            'email'=> $validUser->email,
-            'password'=> bcrypt($validUser->password),
+        $user->update([
+            'name'=> $request->name,
+            'password'=> bcrypt($request->password),
+            'user_atribute_1'=> $request->user_atribute_1,
+            'user_atribute_2'=> $request->user_atribute_2,
         ]);
         
     //response
         return response([
             'message'=> 'updated',
             'user'=> $user,
+        ], 200);
+    }
+
+    public function delete(Request $request) {
+
+    //user
+        $user= User::find(PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
+    
+    //delete
+        $user->delete();
+
+    //response
+        return response([
+            'message'=>'delete success'
         ], 200);
     }
 }

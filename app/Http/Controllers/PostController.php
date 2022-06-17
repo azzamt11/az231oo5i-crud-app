@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -25,7 +26,7 @@ class PostController extends Controller
 
     //response
         return response([
-            'post'=> Post::find($id)->get(),
+            'post'=> Post::where('id',$id)->get(),
         ], 200);
     }
 
@@ -33,23 +34,29 @@ class PostController extends Controller
 
     //response
         return response([
-            'user_posts'=> DB::table('posts')->where('post_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id)->get(),
+            'user_posts'=> DB::table('posts')->where('post_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id)->orderBy('created_at', 'desc')->get(),
         ], 200);
     }
 
     public function storePost(Request $request) {
 
     //validation
-        $validPost= $request->validate([
-            'body'=> 'required|string',
-            'type'=> 'required|integer'
+        $validPost=Validator::make($request->all(), [
+            'post_body'=> 'required|string',
+            'post_type'=> 'required|integer'
         ]);
+
+        if($validPost->fails()) {
+            return response([
+                'message'=> 'bad request'
+            ], 400);
+        }
 
     //post
         $post= Post::create([
-            'post_body'=> $validPost['body'],
+            'post_body'=> $request['post_body'],
             'post_user'=> PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id,
-            'post_type'=> $validPost['type'],
+            'post_type'=> $request['post_type'],
             'post_id'=> 0,
             'post_atribute_1'=> 0,
             'post_atribute_2'=> '',
@@ -66,7 +73,7 @@ class PostController extends Controller
     public function addAtribute(Request $request, $id) {
 
     //finding post
-        $post= Post::find($id); 
+        $post= Post::where('id', $id); 
 
     //update atributes
         $post->update([
@@ -83,25 +90,33 @@ class PostController extends Controller
 
     public function updatePost(Request $request, $id) {
 
-    //new post
-        $validNewPost= $request->validate([
-            'body'=> 'required|string',
-            'atribute_3'=> $request['atribute_3'],
+    //validation field
+        $validNewPost=Validator::make($request->all(), [
+            'post_body'=> 'required|string',
+            'atribute_3'=> 'required|string'
         ]);
 
+        if($validNewPost->fails()) {
+            return response([
+                'message'=> 'bad request', 
+                'request'=> $request,
+            ], 400);
+        }
+
     //post
-        $post= Post::find($id)->where('post_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
+        $post= Post::where('id', $id)->where('post_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
 
     //post authorization and response
         if($post==null) {
             return response([
-                'you dont have access to the requested post'
-            ]);
+                'message'=> 'you dont have access to the requested post',
+                'post'=> $post
+            ], 403);
         } else {
             $post->update([
-                'post_body'=> $validNewPost['body'],
-                'post_atribute_3'=> $validNewPost['atribute_3'],
-            ], 403);
+                'post_body'=> $request['post_body'],
+                'post_atribute_3'=> $request['atribute_3'],
+            ]);
             return response([
                 'message'=> 'update post success',
                 'post'=> $post,
@@ -113,15 +128,15 @@ class PostController extends Controller
     public function deletePost(Request $request, $id) {
     
     //post
-        $post= Post::find($id)->where('post_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
+        $post= Post::where('id', $id)->where('post_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
 
     //post authorization, deleting, and response
         if($post==null) {
             return response([
-                'message'=> 'you dont have access to the requested post'
+                'message'=> 'you dont have access to the requested post',
+                'post'=> $post
             ], 403);
         } else {
-            $post->subposts()->delete();
             $post->delete();
             return response([
                 'message'=> 'post deleted'
