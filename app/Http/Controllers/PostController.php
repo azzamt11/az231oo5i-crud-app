@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\SubPost;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Validator;
@@ -107,7 +108,7 @@ class PostController extends Controller
         $post= Post::where('id', $id)->where('post_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
 
     //post authorization and response
-        if($post==null) {
+        if($post->first()==null) {
             return response([
                 'message'=> 'you dont have access to the requested post',
                 'post'=> $post
@@ -129,9 +130,10 @@ class PostController extends Controller
     
     //post
         $post= Post::where('id', $id)->where('post_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
+        SubPost::where('subpost_parent', $id)->delete();
 
     //post authorization, deleting, and response
-        if($post==null) {
+        if($post->first()==null) {
             return response([
                 'message'=> 'you dont have access to the requested post',
                 'post'=> $post

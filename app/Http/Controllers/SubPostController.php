@@ -43,7 +43,7 @@ class SubPostController extends Controller
             ], 400);
         }
     
-    //post
+    //subpost
         $subpost= SubPost::create([
             'subpost_body'=> $request['subpost_body'],
             'subpost_user'=> PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id,
@@ -102,11 +102,11 @@ class SubPostController extends Controller
             ], 400);
         }
     
-    //post
+    //subpost
         $subpost= SubPost::where('subpost_parent', $id)->where('id', $id)->where('subpost_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
     
-    //post authorization and response
-        if($subpost==null) {
+    //subpost authorization and response
+        if($subpost->first()==null) {
             return response([
                 'message'=> 'you dont have access to the requested subpost',
                 'subpost'=> $subpost
@@ -122,6 +122,26 @@ class SubPostController extends Controller
             ], 200);
         }
             
+    }
+
+    public function deleteSubPost(Request $request, $id, $sid) {
+    
+    //subpost
+        $subpost= SubPost::where('subpost_parent', $id)->where('id', $sid)->where('subpost_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
+    
+    //subpost authorization, deleting, and response
+        if($subpost->first()==null) {
+            return response([
+                'message'=> 'you dont have access to the requested subpost',
+                'subpost'=> $subpost
+            ], 403);
+        } else {
+            $subpost->delete();
+            return response([
+                'message'=> 'subpost deleted',
+
+            ],200);
+        }    
     }
     
 }
