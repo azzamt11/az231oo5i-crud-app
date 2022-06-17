@@ -105,7 +105,7 @@ class SubPostController extends Controller
     //subpost
         $subpost= SubPost::where('subpost_parent', $id)->where('id', $id)->where('subpost_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
     
-    //subpost authorization and response
+    //access evaluation, response, and deletion
         if($subpost->first()==null) {
             return response([
                 'message'=> 'you dont have access to the requested subpost',
