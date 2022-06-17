@@ -132,7 +132,7 @@ class PostController extends Controller
         $post= Post::where('id', $id)->where('post_user', PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id);
         SubPost::where('subpost_parent', $id)->delete();
 
-    //post authorization, deleting, and response
+    //post authorization and response
         if($post->first()==null) {
             return response([
                 'message'=> 'you dont have access to the requested post',
