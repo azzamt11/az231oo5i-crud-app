@@ -29,7 +29,7 @@ Route::post('/posts', [PostController::class, 'storePost']);
 Route::get('/userposts', [PostController::class, 'userPost']);
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{id}', [PostController::class, 'showPostById']);
-Route::post('/posts/atribute/{id}', [PostController::class, 'addAtribute']);
+Route::post('/posts/attribute/{id}', [PostController::class, 'addAttribute']);
 Route::put('/posts/{id}', [PostController::class, 'updatePost']);
 Route::delete('/posts/delete/{id}', [PostController::class, 'deletePost']);
 
@@ -37,7 +37,7 @@ Route::delete('/posts/delete/{id}', [PostController::class, 'deletePost']);
 Route::get('/posts/{id}/subposts', [SubPostController::class, 'subindex']);
 Route::get('/posts/{id}/subposts/{sid}', [SubPostController::class, 'showSubPostById']);
 Route::get('/usersubposts', [SubPostController::class, 'userSubPost']);
-Route::put('/posts/{id}/subposts/atribute/{sid}', [SubPostController::class, 'addAtribute']);
+Route::put('/posts/{id}/subposts/attribute/{sid}', [SubPostController::class, 'addAttribute']);
 Route::post('/posts/{id}/subposts', [SubPostController::class, 'storeSubPost']);
 Route::put('/posts/{id}/subposts/{sid}', [SubPostController::class, 'updateSubPost']);
 Route::delete('/posts/{id}/subposts/delete/{sid}', [SubPostController::class, 'deleteSubPost']);

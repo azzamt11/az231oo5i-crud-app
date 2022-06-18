@@ -49,9 +49,9 @@ class SubPostController extends Controller
             'subpost_user'=> PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id,
             'subpost_type'=> $request['subpost_type'],
             'subpost_parent'=> $id,
-            'subpost_atribute_1'=> 0,
-            'subpost_atribute_2'=> '',
-            'subpost_atribute_3'=> '',
+            'subpost_attribute_1'=> 0,
+            'subpost_attribute_2'=> '',
+            'subpost_attribute_3'=> '',
         ]);
         
     //response
@@ -69,20 +69,20 @@ class SubPostController extends Controller
         ], 200);
     }
 
-    public function addAtribute(Request $request, $id, $sid) {
+    public function addAttribute(Request $request, $id, $sid) {
 
     //finding post
         $subpost= SubPost::where('subpost_parent', $id)->where('id', $sid)->get(); 
     
-    //update atributes
+    //update attributes
         $subpost->first()->update([
-            'subpost_atribute_1'=> PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id,
-            'subpost_atribute_2'=> $request['atribute_2'],
+            'subpost_attribute_1'=> PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id,
+            'subpost_attribute_2'=> $request['attribute_2'],
         ]);
     
     //response
         return response([
-            'message'=> 'Atributes have been added',
+            'message'=> 'attributes have been added',
             'subpost'=> $subpost,
         ], 200);
     }
@@ -92,7 +92,7 @@ class SubPostController extends Controller
     //validation field
         $validNewPost=Validator::make($request->all(), [
             'subpost_body'=> 'required|string',
-            'atribute_3'=> 'required|string'
+            'attribute_3'=> 'required|string'
         ]);
     
         if($validNewPost->fails()) {
@@ -114,7 +114,7 @@ class SubPostController extends Controller
         } else {
             $subpost->update([
                 'subpost_body'=> $request['subpost_body'],
-                'subpost_atribute_3'=> $request['atribute_3'],
+                'subpost_attribute_3'=> $request['attribute_3'],
             ]);
             return response([
                 'message'=> 'update subpost success',

@@ -16,9 +16,9 @@ class Post extends Model
         'post_type',
         'post_user',
         'post_id',
-        'post_atribute_1',
-        'post_atribute_2',
-        'post_atribute_3',
+        'post_attribute_1',
+        'post_attribute_2',
+        'post_attribute_3',
         
     ];
 }

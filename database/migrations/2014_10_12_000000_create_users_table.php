@@ -21,11 +21,11 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->string('user_atribute_1')->nullable();
-            $table->string('user_atribute_2')->nullable();
-            $table->string('user_atribute_3')->nullable();
-            $table->string('user_atribute_4')->nullable();
-            $table->string('user_atribute_5')->nullable();
+            $table->string('user_attribute_1')->nullable();
+            $table->string('user_attribute_2')->nullable();
+            $table->string('user_attribute_3')->nullable();
+            $table->string('user_attribute_4')->nullable();
+            $table->string('user_attribute_5')->nullable();
         });
     }
 

@@ -20,9 +20,9 @@ return new class extends Migration
             $table->integer('subpost_type')->default(0);
             $table->integer('subpost_user')->default(1);
             $table->integer('subpost_parent')->default(1);
-            $table->integer('subpost_atribute_1')->default(1);
-            $table->string('subpost_atribute_2')->nullable();
-            $table->string('subpost_atribute_3')->nullable();
+            $table->integer('subpost_attribute_1')->default(1);
+            $table->string('subpost_attribute_2')->nullable();
+            $table->string('subpost_attribute_3')->nullable();
         });
     }
 

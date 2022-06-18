@@ -20,9 +20,9 @@ return new class extends Migration
             $table->integer('post_type')->default(0);
             $table->integer('post_user')->default(1);
             $table->integer('post_id')->default(1);
-            $table->integer('post_atribute_1')->default(1);
-            $table->string('post_atribute_2')->nullable();
-            $table->string('post_atribute_3')->nullable();
+            $table->integer('post_attribute_1')->default(1);
+            $table->string('post_attribute_2')->nullable();
+            $table->string('post_attribute_3')->nullable();
         });
     }
 

@@ -59,9 +59,9 @@ class PostController extends Controller
             'post_user'=> PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id,
             'post_type'=> $request['post_type'],
             'post_id'=> 0,
-            'post_atribute_1'=> 0,
-            'post_atribute_2'=> '',
-            'post_atribute_3'=> '',
+            'post_attribute_1'=> 0,
+            'post_attribute_2'=> '',
+            'post_attribute_3'=> '',
         ]);
     
     //response
@@ -71,20 +71,20 @@ class PostController extends Controller
         ],200);    
     }
 
-    public function addAtribute(Request $request, $id) {
+    public function addAttribute(Request $request, $id) {
 
     //finding post
         $post= Post::where('id', $id); 
 
-    //update atributes
+    //update attributes
         $post->update([
-            'post_atribute_1'=> PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id,
-            'post_atribute_2'=> $request['atribute_2'],
+            'post_attribute_1'=> PersonalAccessToken::findToken(explode(' ',$request->header('Authorization'))[1])->tokenable_id,
+            'post_attribute_2'=> $request['attribute_2'],
         ]);
 
     //response
         return response([
-            'message'=> 'Atributes have been added',
+            'message'=> 'attributes have been added',
             'post'=> $post,
         ], 200);
     }
@@ -94,7 +94,7 @@ class PostController extends Controller
     //validation field
         $validNewPost=Validator::make($request->all(), [
             'post_body'=> 'required|string',
-            'atribute_3'=> 'required|string'
+            'attribute_3'=> 'required|string'
         ]);
 
         if($validNewPost->fails()) {
@@ -116,7 +116,7 @@ class PostController extends Controller
         } else {
             $post->update([
                 'post_body'=> $request['post_body'],
-                'post_atribute_3'=> $request['atribute_3'],
+                'post_attribute_3'=> $request['attribute_3'],
             ]);
             return response([
                 'message'=> 'update post success',

@@ -30,11 +30,11 @@ class AuthController extends Controller
         $user->name= $request->name;
         $user->email= $request->email;
         $user->password= bcrypt($request->password);
-        $user->user_atribute_1= '';
-        $user->user_atribute_2= '';
-        $user->user_atribute_3= '';
-        $user->user_atribute_4= '';
-        $user->user_atribute_5= '';
+        $user->user_attribute_1= '';
+        $user->user_attribute_2= '';
+        $user->user_attribute_3= '';
+        $user->user_attribute_4= '';
+        $user->user_attribute_5= '';
         $user->save();
 
     //response
@@ -105,8 +105,8 @@ class AuthController extends Controller
         $validUser=Validator::make($request->all(), [
             'name'=> 'required|string',
             'password'=> 'required|string',
-            'user_atribute_1'=> 'nullable|string',
-            'user_atribute_2'=> 'nullable|string',
+            'user_attribute_1'=> 'nullable|string',
+            'user_attribute_2'=> 'nullable|string',
         ]);
 
         if($validUser->fails()) {
@@ -119,8 +119,8 @@ class AuthController extends Controller
         $user->update([
             'name'=> $request->name,
             'password'=> bcrypt($request->password),
-            'user_atribute_1'=> $request->user_atribute_1,
-            'user_atribute_2'=> $request->user_atribute_2,
+            'user_attribute_1'=> $request->user_attribute_1,
+            'user_attribute_2'=> $request->user_attribute_2,
         ]);
         
     //response
