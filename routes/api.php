@@ -53,4 +53,3 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('/posts/{id}/subposts/delete/{sid}', [SubPostController::class, 'deleteSubPost']);
 
 });
-
