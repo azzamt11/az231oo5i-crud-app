@@ -17,44 +17,40 @@ use App\Http\Controllers\SubPostController;
 |
 */
 
-//user out of middleware
-Route::get('/user', [AuthController::class, 'user']);
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
-Route::post('/user', [AuthController::class, 'update']);
-Route::delete('/user', [AuthController::class, 'delete']);
-Route::post('/posts', [PostController::class, 'storePost']);
-
-//posts out of middleware
-Route::get('/userposts', [PostController::class, 'userPost']);
-Route::get('/posts', [PostController::class, 'index']);
-Route::get('/posts/{id}', [PostController::class, 'showPostById']);
-Route::post('/posts/attribute/{id}', [PostController::class, 'addAttribute']);
-Route::put('/posts/{id}', [PostController::class, 'updatePost']);
-Route::delete('/posts/delete/{id}', [PostController::class, 'deletePost']);
-
-//subposts out of middleware
-Route::get('/posts/{id}/subposts', [SubPostController::class, 'subindex']);
-Route::get('/posts/{id}/subposts/{sid}', [SubPostController::class, 'showSubPostById']);
-Route::get('/usersubposts', [SubPostController::class, 'userSubPost']);
-Route::put('/posts/{id}/subposts/attribute/{sid}', [SubPostController::class, 'addAttribute']);
-Route::post('/posts/{id}/subposts', [SubPostController::class, 'storeSubPost']);
-Route::put('/posts/{id}/subposts/{sid}', [SubPostController::class, 'updateSubPost']);
-Route::delete('/posts/{id}/subposts/delete/{sid}', [SubPostController::class, 'deleteSubPost']);
-
 //middleware
-Route::middleware(['middleware'=> 'auth:sanctum'], function() {
-
-//user
-    Route::get('/user', [AuthController::class, 'user']);
-
-//post
-    Route::post('/posts', [PostController::class, 'storePost']);
-
-//subpost
-});
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//first step authentication
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function() {
+
+    //in-middleware user functions
+    Route::post('/user', [AuthController::class, 'user']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/user', [AuthController::class, 'update']);
+    Route::delete('/user', [AuthController::class, 'delete']);
+    Route::post('/posts', [PostController::class, 'storePost']);
+
+    //in-middleware post functions
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::get('/userposts', [PostController::class, 'userPost']);
+    Route::get('/posts/{id}', [PostController::class, 'showPostById']);
+    Route::post('/posts/attribute/{id}', [PostController::class, 'addAttribute']);
+    Route::put('/posts/{id}', [PostController::class, 'updatePost']);
+    Route::delete('/posts/delete/{id}', [PostController::class, 'deletePost']);
+
+    //in-middleware subpost functions
+    Route::get('/posts/{id}/subposts', [SubPostController::class, 'subindex']);
+    Route::get('/posts/{id}/subposts/{sid}', [SubPostController::class, 'showSubPostById']);
+    Route::get('/usersubposts', [SubPostController::class, 'userSubPost']);
+    Route::put('/posts/{id}/subposts/attribute/{sid}', [SubPostController::class, 'addAttribute']);
+    Route::post('/posts/{id}/subposts', [SubPostController::class, 'storeSubPost']);
+    Route::put('/posts/{id}/subposts/{sid}', [SubPostController::class, 'updateSubPost']);
+    Route::delete('/posts/{id}/subposts/delete/{sid}', [SubPostController::class, 'deleteSubPost']);
+
+});
+
